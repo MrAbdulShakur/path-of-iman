@@ -1,0 +1,7 @@
+
+# push code to github
+git add .  
+git commit -m "initial commit debug"
+git push -u origin main 
+
+sudo chown -R $(whoami) ./
