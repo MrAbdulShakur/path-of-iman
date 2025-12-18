@@ -45,7 +45,7 @@ export default function SuccessModal({
                     exit={{ scale: 0.9, y: 20 }}
                     transition={{ type: "spring", damping: 20 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden"
+                    className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-x-hidden overflow-y-scroll max-h-screen"
                 >
                     {/* Header */}
                     <div className={`p-6 text-center text-white ${isBrother ? 'bg-linear-to-br from-emerald-500 to-emerald-600' : 'bg-linear-to-br from-amber-500 to-amber-600'}`}>
