@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGame } from './GameContext';
 import AnswerOption from './AnswerOption';
@@ -6,6 +6,7 @@ import EmojiWatcher from './EmojiWatcher';
 import SuccessModal from './SuccessModal';
 import { BookOpen, Info } from 'lucide-react';
 import { Badge } from '../utils/Badge';
+import { delay } from '@/app/lib/utils';
 
 const difficultyColors = {
     easy: 'bg-green-100 text-green-700',
@@ -18,6 +19,7 @@ export default function QuestionCard() {
     const [attempts, setAttempts] = useState(0);
     const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
     const [showSuccess, setShowSuccess] = useState<boolean|null>(null);
+    const [showSuccessTimeout, setShowSuccessTimeout] = useState<NodeJS.Timeout | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [animationKey, setAnimationKey] = useState(0);
 
@@ -33,12 +35,37 @@ export default function QuestionCard() {
 		})()
     }, [currentLevel]);
 
-    const handleAnswerSelect = (index: number) => {
+    useEffect(() => {
+        (() => {
+            if(showSuccess !== null){
+            const timeout = setTimeout(() => setShowSuccess(null), 5000)
+            setShowSuccessTimeout(timeout);
+        }
+        })()
+
+        return () => {
+            // Cleanup timeout on unmount or when showSuccess changes
+            if(showSuccessTimeout !== null){
+                clearTimeout(showSuccessTimeout);
+                setShowSuccessTimeout(null);
+            }
+        }
+    }, [showSuccess, showSuccessTimeout, setShowSuccessTimeout])
+
+    const handleAnswerSelect = useCallback(async (index: number) => {
         if (selectedAnswers.includes(index)) return;
         
         const newAttempts = attempts + 1;
         setAttempts(newAttempts);
         setSelectedAnswers([...selectedAnswers, index]);
+
+        if(showSuccessTimeout !== null){
+            clearTimeout(showSuccessTimeout);
+                setShowSuccessTimeout(null);
+        }
+
+        setShowSuccess(null)
+        await delay(500);
 
         if (index === currentQuestion?.correctAnswerIndex) {
             setShowSuccess(true);
@@ -49,13 +76,14 @@ export default function QuestionCard() {
         }else{
             setShowSuccess(false);
         }
-    };
+    }, [attempts, selectedAnswers, currentQuestion, recordAnswer, showSuccessTimeout, setShowSuccessTimeout]);
 
-    const handleContinue = () => {
+
+    const handleContinue = useCallback(() => {
         setShowModal(false);
         setShowSuccess(null);
         nextLevel();
-    };
+    }, [nextLevel]);
 
     if (!currentQuestion) return null;
 

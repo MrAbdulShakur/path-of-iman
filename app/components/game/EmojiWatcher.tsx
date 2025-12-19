@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function EmojiWatcher({ showSuccess }: { showSuccess: boolean|null }) {
     return (
-        <div className="fixed top-32 left-4 z-50">
+        <div className="fixed top-32 left-4 z-50 translate-y-1/2">
             <AnimatePresence mode="wait">
                 {showSuccess ? (
                     <motion.div

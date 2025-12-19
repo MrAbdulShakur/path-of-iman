@@ -125,7 +125,48 @@ export default function Scoreboard() {
                         </div>
                     </div>
                     <p className="text-white/80 mb-2">Your Rank</p>
+
+                    {/* <div className="flex items-baseline justify-center gap-2 mb-3">
+                        <span className={`text-6xl font-bold ${isBrother ? 'text-emerald-50' : 'text-amber-600'}`}>
+                            {rank.finalScore}
+                        </span>
+                        <span className="text-3xl text-gray-300 font-medium">/ 100</span>
+                    </div> */}
+                    
                     <h2 className="text-3xl font-bold">{rank.title}</h2>
+                </motion.div>
+
+                {/* Rank Score Card */}
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.55 }}
+                    className="bg-white rounded-3xl p-8 shadow-xl border-2 border-gray-100 mb-8 text-center"
+                >
+                    <div className="inline-flex items-center gap-3 mb-4">
+                        <Trophy className={`w-8 h-8 ${isBrother ? 'text-emerald-600' : 'text-amber-600'}`} />
+                        <h3 className="text-2xl font-bold text-gray-900">Rank Score</h3>
+                    </div>
+                    
+                    <div className="flex items-baseline justify-center gap-2 mb-3">
+                        <span className={`text-6xl font-bold ${isBrother ? 'text-emerald-600' : 'text-amber-600'}`}>
+                            {rank.finalScore}
+                        </span>
+                        <span className="text-3xl text-gray-400 font-medium">/ 100</span>
+                    </div>
+                    
+                    <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden mb-3">
+                        <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${(rank.finalScore / 100) * 100}%` }}
+                            transition={{ delay: 0.8, duration: 1, ease: "easeOut" }}
+                            className={`h-full rounded-full ${isBrother ? 'bg-linear-to-r from-emerald-500 to-emerald-600' : 'bg-linear-to-r from-amber-500 to-amber-600'}`}
+                        />
+                    </div>
+                    
+                    <p className="text-gray-500 text-lg font-medium">
+                        Based on your accuracy, time taken, and attempts.
+                    </p>
                 </motion.div>
 
                 {/* Stats Grid */}
